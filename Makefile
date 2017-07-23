@@ -2,6 +2,12 @@
 
 all: build test
 
+heroku:
+	go get -u github.com/golang/dep/cmd/dep
+	dep ensure -update
+	make build
+	./bin/depbleed &
+
 build:
 	go build -o bin/depbleed ./depbleed
 
