@@ -3,6 +3,7 @@ package persistence
 import (
 	"fmt"
 	"os"
+	"time"
 
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -62,12 +63,20 @@ func NewMongo() (*mongo, error) {
 		},
 	}
 
+	mgDBDialInfo := &mgo.DialInfo{
+		Addrs:    []string{mg.dbAddress},
+		Timeout:  60 * time.Second,
+		Database: mg.dbName,
+		Username: mg.dbUser,
+		Password: mg.dbPassword,
+	}
+
 	fmt.Println("MONGOD_DB", os.Getenv("MONGOD_DB"))
 	fmt.Println("MONGOD_USER", os.Getenv("MONGOD_USER"))
 	fmt.Println("MONGOD_PW", os.Getenv("MONGOD_PW"))
 	fmt.Println("MONGOD_URL", os.Getenv("MONGOD_URL"))
 
-	session, err := mgo.Dial(mg.dbAddress)
+	session, err := mgo.DialWithInfo(mgDBDialInfo)
 
 	if err != nil {
 		return nil, err

@@ -48,12 +48,16 @@ func main() {
 		persistence: persistence,
 	}
 
+	if os.Getenv("PORT") == "" {
+		os.Setenv("PORT", "80")
+	}
+
 	fmt.Println("Serving on localhost", os.Getenv("PORT"))
 
 	mux := goji.NewMux()
 	mux.HandleFunc(pat.Get("/leaks/go/:user/:repo"), analyse(backend))
 	mux.HandleFunc(pat.Get("/leaks/go/all/:skip/:limit"), allRepositories(backend))
-	http.ListenAndServe("localhost"+os.Getenv("PORT"), mux)
+	http.ListenAndServe("localhost:"+os.Getenv("PORT"), mux)
 }
 
 func log(ip string, time string, method string, path string, code string, elasped string) {
