@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"fmt"
 	"os"
 
 	mgo "gopkg.in/mgo.v2"
@@ -60,6 +61,11 @@ func NewMongo() (*mongo, error) {
 			Password: os.Getenv("MONGOD_PW"),
 		},
 	}
+
+	fmt.Println("MONGOD_DB", os.Getenv("MONGOD_DB"))
+	fmt.Println("MONGOD_USER", os.Getenv("MONGOD_USER"))
+	fmt.Println("MONGOD_PW", os.Getenv("MONGOD_PW"))
+	fmt.Println("MONGOD_URL", os.Getenv("MONGOD_URL"))
 
 	session, err := mgo.Dial(mg.dbAddress)
 
