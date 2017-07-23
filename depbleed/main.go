@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go/build"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -145,15 +146,9 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	wd, _ := os.Getwd()
 	//Get paths
 	absPath, _ := filepath.Abs(wd)
-	gopath := os.Getenv("GOPATH") // build.Default.GOPATH
+	gopath := build.Default.GOPATH
 	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"/repositories/"+user+"/"+repo)
-	packageInfo, _ := depbleed.GetPackageInfo(absPath + "/repositories/" + user + "/" + repo)
-
-	fmt.Println(absPath)
-	fmt.Println(absPath + "/repositories/" + user + "/" + repo)
-	fmt.Println(gopath)
-	fmt.Println(packagePath)
-	fmt.Println(packageInfo)
+	packageInfo, _ := depbleed.GetPackageInfo(packagePath)
 
 	//Compute leaks
 	leaks := packageInfo.Leaks()
