@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go/build"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -146,7 +145,7 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	wd, _ := os.Getwd()
 	//Get paths
 	absPath, _ := filepath.Abs(wd)
-	gopath := build.Default.GOPATH
+	gopath := os.Getenv("GOPATH") // build.Default.GOPATH
 	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"/repositories/"+user+"/"+repo)
 	packageInfo, _ := depbleed.GetPackageInfo(packagePath)
 
