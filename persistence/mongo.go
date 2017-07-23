@@ -1,6 +1,8 @@
 package persistence
 
 import (
+	"os"
+
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -49,24 +51,24 @@ type DAO interface {
 func NewMongo() (*mongo, error) {
 
 	mg := &mongo{
-		dbName:      "local",
-		dbUser:      "",
-		dbPassword:  "",
-		dbAddress:   "192.168.0.112:27017",
+		dbName:     os.Getenv("MONGOD_DB"),
+		dbUser:     os.Getenv("MONGOD_USER"),
+		dbPassword: os.Getenv("MONGOD_PW"),
+		dbAddress:  os.Getenv("MONGOD_URL"),
 		credentials: &mgo.Credential{
-		// Username: os.Getenv("MONGOD_USER"),
-		// Password: os.Getenv("MONGOD_PASSWORD"),
+			Username: os.Getenv("MONGOD_USER"),
+			Password: os.Getenv("MONGOD_PW"),
 		},
 	}
 
-	session, err := mgo.Dial(mg.dbAddress) //"MONGOD_ADDRESS"))
+	session, err := mgo.Dial(mg.dbAddress)
 
 	if err != nil {
 		return nil, err
 	}
 
 	mg.session = session
-	//err = mg.session.Login(mg.credentials)
+	err = mg.session.Login(mg.credentials)
 
 	if err != nil {
 		return nil, err
