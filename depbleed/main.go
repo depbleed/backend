@@ -16,6 +16,8 @@ import (
 
 	goji "goji.io"
 
+	"strings"
+
 	"goji.io/pat"
 )
 
@@ -145,25 +147,24 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	//Get paths
 	absPath, _ := filepath.Abs(wd)
 	gopath := build.Default.GOPATH
-	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"repositories/"+user+"/"+repo)
+	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"/repositories/"+user+"/"+repo)
 	packageInfo, _ := depbleed.GetPackageInfo(packagePath)
 
 	//Compute leaks
 	leaks := packageInfo.Leaks()
 	for _, leak := range leaks {
-		relPath, err := filepath.Rel(wd, leak.Position.Filename)
 
-		if err != nil {
-			relPath = leak.Position.Filename
-		}
+		relPath, _ := filepath.Rel(wd, leak.Position.Filename)
+		relPath = strings.Replace(leak.Position.Filename, absPath+"/repositories/", "", 1)
 
 		//Append all the leaks
 		analysis.Leaks = append(analysis.Leaks, &persistence.Leak{
-			Message: fmt.Sprintf("%s:%d:%d: %s\n", relPath, leak.Position.Line, leak.Position.Column, leak),
+			Message: strings.Replace(leak.Error(), "github.com/depbleed/backend/repositories/", "", 1),
 			Column:  leak.Position.Column,
 			Line:    leak.Position.Line,
-			Path:    relPath,
+			File:    relPath,
 		})
+
 	}
 }
 

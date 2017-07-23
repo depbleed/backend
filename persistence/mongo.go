@@ -24,10 +24,15 @@ type Analysis struct {
 
 //Leak represents one dependency leak
 type Leak struct {
-	Message string `json:"message"`
+	File    string `json:"file"`
 	Line    int    `json:"line"`
 	Column  int    `json:"column"`
-	Path    string `json:"path"`
+	Message string `json:"message"`
+}
+
+type Infos struct {
+	Projects int `json:"projects"`
+	Leaks    int `json:"leaks"`
 }
 
 //mongo is a DAO implementation for MongoDB
