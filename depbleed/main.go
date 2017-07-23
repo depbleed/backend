@@ -150,6 +150,7 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	packageInfo, _ := depbleed.GetPackageInfo(absPath + "/repositories/" + user + "/" + repo)
 
 	fmt.Println(absPath)
+	fmt.Println(absPath + "/repositories/" + user + "/" + repo)
 	fmt.Println(gopath)
 	fmt.Println(packagePath)
 	fmt.Println(packageInfo)
