@@ -150,6 +150,8 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"/repositories/"+user+"/"+repo)
 	packageInfo, _ := depbleed.GetPackageInfo(packagePath)
 
+	fmt.Println(absPath, gopath, packagePath)
+
 	//Compute leaks
 	leaks := packageInfo.Leaks()
 	for _, leak := range leaks {
