@@ -147,7 +147,7 @@ func runAnalysis(analysis *persistence.Analysis, user string, repo string) {
 	absPath, _ := filepath.Abs(wd)
 	gopath := os.Getenv("GOPATH") // build.Default.GOPATH
 	packagePath, _ := depbleed.GetPackagePath(gopath, absPath+"/repositories/"+user+"/"+repo)
-	packageInfo, _ := depbleed.GetPackageInfo(packagePath)
+	packageInfo, _ := depbleed.GetPackageInfo(absPath + "/repositories/" + user + "/" + repo)
 
 	fmt.Println(absPath)
 	fmt.Println(gopath)
